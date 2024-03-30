@@ -19,10 +19,10 @@ class LoginPage(BasePage):
         self.wait.until(EC.element_to_be_clickable(self.EMAIL_FIELD)).send_keys(email)
 
     def enter_password(self, password: str) -> None:
-        self.wait.until(EC.element_to_be_clickable(self.EMAIL_FIELD)).send_keys(password)
+        self.wait.until(EC.element_to_be_clickable(self.PASSWORD_FIELD)).send_keys(password)
 
-    def click_login_button(self):
+    def click_login_button(self) -> None:
         self.wait.until(EC.element_to_be_clickable(self.LOGIN_BUTTON)).click()
 
-    def click_sign_up(self):
+    def click_sign_up(self) -> None:
         self.wait.until(EC.element_to_be_clickable(self.SIGN_UP_BUTTON)).click()

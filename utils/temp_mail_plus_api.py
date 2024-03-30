@@ -1,25 +1,34 @@
+import datetime
 import requests
-from utils.email_randomizer import generate_random_email
 from utils.parse_mail import parser
 
 
 class TempMailAPI:
     BASE_URL = 'https://tempmail.plus/api/mails'
 
-    def __init__(self):
-        self.email = generate_random_email()
+    def __init__(self, email: str):
+        self.email = email
 
-    def get_mail_id(self) -> int:
+    def get_mails(self) -> object:
         response = requests.get(self.BASE_URL + f'?email={self.email}')
         response_data = response.json()
 
-        return response_data['mail_list'][0]['mail_id']
+        return response_data
+
+    def get_mail_id(self) -> int:
+        if not self.email_is_recieved():
+            raise Exception('Email is not recieved')
+
+        response_data = self.get_mails()
+        mail_id = response_data['mail_list'][0]['mail_id']
+
+        return mail_id
 
     def get_mail(self) -> str:
         mail_id = self.get_mail_id()
         response = requests.get(self.BASE_URL + f'/{mail_id}?email={self.email}')
         response_data = response.json()
-        message = response_data['text']
+        message = response_data['html']
 
         return message
 
@@ -32,3 +41,17 @@ class TempMailAPI:
         message = self.get_mail()
 
         return parser.get_confirm_link(message)
+
+    def email_is_recieved(self) -> bool:
+        end_time = datetime.datetime.now() + datetime.timedelta(seconds=15)
+
+        while True:
+            if datetime.datetime.now() >= end_time:
+                return False
+
+            mails = self.get_mails()
+
+            if mails['count'] > 0 and \
+                    mails['mail_list'][0]['from_mail'] == 'service@freevpnplanet.com' and \
+                    mails['mail_list'][0]['subject'] == 'Confirmation of registration':
+                return True

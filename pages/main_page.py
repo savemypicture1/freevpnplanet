@@ -8,5 +8,5 @@ class MainPage(BasePage):
 
     LOG_IN_BUTTON = ('css selector', '[href="/login/"]')
 
-    def click_log_in_button(self):
+    def click_log_in_button(self) -> None:
         self.wait.until(EC.element_to_be_clickable(self.LOG_IN_BUTTON)).click()

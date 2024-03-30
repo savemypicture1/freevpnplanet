@@ -2,8 +2,8 @@ import re
 
 
 class Parser:
-    PASSWORD_REGEX = r'password:\*\\n\\n\*(.*?)\*\\n\\n'
-    CONFIRM_REGEX = r'REGISTRATION \( (.*?) \)'
+    PASSWORD_REGEX = r'<strong><span>(.*?)<\/span><\/strong>'
+    CONFIRM_REGEX = 'href=\"(.*?)\"\\n'
 
     def parse(self, regex: str, text: str) -> str | None:
         match = re.search(regex, text)
