@@ -28,18 +28,18 @@ def test_registration(driver):
     mail_api = TempMailAPI(email)
 
     assert title == 'Download Planet VPN for your devices', 'Wrong title'
-    assert mail_api.email_is_recieved()
+    assert mail_api.email_is_recieved('Confirmation of registration'), 'No email'
 
 
 def test_verification_after_registration(driver, registered_account_without_verification):
     email = registered_account_without_verification['email']
     mail_api = TempMailAPI(email)
-    verification_link = mail_api.get_confirm_link_from_email()
-    driver.get(str(verification_link))
+    verification_link = mail_api.get_confirm_link_from_email('Confirmation of registration')
+    driver.get(verification_link)
 
     profile_page = ProfilePage(driver)
 
-    assert profile_page.get_account_status() == 'Active'
+    assert profile_page.get_account_status() == 'Active', 'Wrong account status'
 
 
 def test_registration_with_already_registered_account(driver, registered_account_without_verification):

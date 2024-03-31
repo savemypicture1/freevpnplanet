@@ -1,6 +1,5 @@
 from pages.base_page import BasePage
 from config.links import Links
-from selenium.webdriver.support import expected_conditions as EC
 
 
 class SignupPage(BasePage):
@@ -13,16 +12,16 @@ class SignupPage(BasePage):
     ERROR_MSG = ('css selector', '.login-slot .error-text')
 
     def get_title(self) -> str:
-        return self.wait.until(EC.visibility_of_element_located(self.SIGN_UP_TITLE)).text
+        return self.get_text(self.SIGN_UP_TITLE)
 
     def enter_email(self, email: str) -> None:
-        self.wait.until(EC.element_to_be_clickable(self.EMAIL_FIELD)).send_keys(email)
+        self.send_keys(self.EMAIL_FIELD, email)
 
     def click_create_button(self) -> None:
-        self.wait.until(EC.element_to_be_clickable(self.CREATE_BUTTON)).click()
+        self.click(self.CREATE_BUTTON)
 
     def click_next_button(self) -> None:
-        self.wait.until(EC.element_to_be_clickable(self.NEXT_BUTTON)).click()
+        self.click(self.NEXT_BUTTON)
 
     def get_error_msg(self) -> str:
-        return self.wait.until(EC.visibility_of_element_located(self.ERROR_MSG)).text
+        return self.get_text(self.ERROR_MSG)

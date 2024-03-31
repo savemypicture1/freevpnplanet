@@ -1,6 +1,4 @@
 from pages.base_page import BasePage
-from config.links import Links
-from selenium.webdriver.support import expected_conditions as EC
 
 
 class CabinetPage(BasePage):
@@ -9,7 +7,7 @@ class CabinetPage(BasePage):
     CONFIGURATIONS = ('css selector', '[href="/cabinet/configuration/"]')
 
     def get_title(self) -> str:
-        return self.wait.until(EC.visibility_of_element_located(self.TITLE)).text
+        return self.get_text(self.TITLE)
 
     def click_profile_button(self) -> None:
-        self.wait.until(EC.element_to_be_clickable(self.PROFILE)).click()
+        self.click(self.PROFILE)

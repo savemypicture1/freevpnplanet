@@ -16,9 +16,6 @@ class TempMailAPI:
         return response_data
 
     def get_mail_id(self) -> int:
-        if not self.email_is_recieved():
-            raise Exception('Email is not recieved')
-
         response_data = self.get_mails()
         mail_id = response_data['mail_list'][0]['mail_id']
 
@@ -32,17 +29,23 @@ class TempMailAPI:
 
         return message
 
-    def get_password_from_email(self) -> str | None:
+    def get_password_from_email(self, subject: str) -> str | None:
+        if not self.email_is_recieved(subject):
+            raise Exception('Email is not recieved')
+
         message = self.get_mail()
 
         return parser.get_password(message)
 
-    def get_confirm_link_from_email(self) -> str | None:
+    def get_confirm_link_from_email(self, subject: str) -> str | None:
+        if not self.email_is_recieved(subject):
+            raise Exception('Email is not recieved')
+
         message = self.get_mail()
 
         return parser.get_confirm_link(message)
 
-    def email_is_recieved(self) -> bool:
+    def email_is_recieved(self, subject: str) -> bool:
         end_time = datetime.datetime.now() + datetime.timedelta(seconds=15)
 
         while True:
@@ -53,5 +56,5 @@ class TempMailAPI:
 
             if mails['count'] > 0 and \
                     mails['mail_list'][0]['from_mail'] == 'service@freevpnplanet.com' and \
-                    mails['mail_list'][0]['subject'] == 'Confirmation of registration':
+                    mails['mail_list'][0]['subject'] == subject:
                 return True
