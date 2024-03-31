@@ -46,7 +46,7 @@ class TempMailAPI:
         return parser.get_confirm_link(message)
 
     def email_is_recieved(self, subject: str) -> bool:
-        end_time = datetime.datetime.now() + datetime.timedelta(seconds=15)
+        end_time = datetime.datetime.now() + datetime.timedelta(seconds=20)
 
         while True:
             if datetime.datetime.now() >= end_time:

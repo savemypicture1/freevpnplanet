@@ -1,27 +1,27 @@
+import allure
 import pytest
 
 from pages.cabinet_profile_page import ProfilePage
-from pages.login_page import LoginPage
 from pages.sign_up_page import SignupPage
 from pages.cabinet_download_page import DownloadPage
-from pages.main_page import MainPage
 from utils.email_randomizer import generate_random_email
 from utils.temp_mail_plus_api import TempMailAPI
 
 
-def test_registration(driver):
-    main_page = MainPage(driver)
-    main_page.open()
-    main_page.click_log_in_button()
-
-    login_page = LoginPage(driver)
-    login_page.click_sign_up()
-
-    signup_page = SignupPage(driver)
+@allure.suite('Registration page')
+@allure.title('Test registration')
+def test_registration(driver, open_registration_page):
     email = generate_random_email()
-    signup_page.enter_email(email)
-    signup_page.click_create_button()
-    signup_page.click_next_button()
+
+    with allure.step(f'Enter valid email: {email}'):
+        signup_page = SignupPage(driver)
+        signup_page.enter_email(email)
+
+    with allure.step('Click on create button'):
+        signup_page.click_create_button()
+
+    with allure.step('Click on next button'):
+        signup_page.click_next_button()
 
     download_page = DownloadPage(driver)
     title = download_page.get_title()
@@ -31,48 +31,52 @@ def test_registration(driver):
     assert mail_api.email_is_recieved('Confirmation of registration'), 'No email'
 
 
+@allure.suite('Registration page')
+@allure.title('Test verification after registration')
 def test_verification_after_registration(driver, registered_account_without_verification):
     email = registered_account_without_verification['email']
     mail_api = TempMailAPI(email)
-    verification_link = mail_api.get_confirm_link_from_email('Confirmation of registration')
-    driver.get(verification_link)
+
+    with allure.step('Getting verification link'):
+        verification_link = mail_api.get_confirm_link_from_email('Confirmation of registration')
+
+    with allure.step('Open verification link'):
+        driver.get(verification_link)
 
     profile_page = ProfilePage(driver)
 
     assert profile_page.get_account_status() == 'Active', 'Wrong account status'
 
 
+@allure.suite('Registration page')
+@allure.title('Test registration with already registered account')
 def test_registration_with_already_registered_account(driver, registered_account_without_verification):
     email = registered_account_without_verification['email']
-    main_page = MainPage(driver)
-    main_page.open()
-    main_page.click_log_in_button()
 
-    login_page = LoginPage(driver)
-    login_page.click_sign_up()
+    with allure.step(f'Enter registered email: {email}'):
+        signup_page = SignupPage(driver)
+        signup_page.open()
+        signup_page.enter_email(email)
 
-    signup_page = SignupPage(driver)
-    signup_page.enter_email(email)
-    signup_page.click_create_button()
+    with allure.step('Click on create button'):
+        signup_page.click_create_button()
 
     error_msg = signup_page.get_error_msg()
 
     assert error_msg == 'The email has already been taken', 'No error message'
 
 
+@allure.suite('Registration page')
+@allure.title('Test registration with incorrect email')
 @pytest.mark.parametrize('email',
                          ['thisisnotemail', '  ', ''])
-def test_registration_with_incorrect_email(driver, email):
-    main_page = MainPage(driver)
-    main_page.open()
-    main_page.click_log_in_button()
+def test_registration_with_incorrect_email(driver, open_registration_page, email):
+    with allure.step(f'Enter incorrect email: {email}'):
+        signup_page = SignupPage(driver)
+        signup_page.enter_email(email)
 
-    login_page = LoginPage(driver)
-    login_page.click_sign_up()
-
-    signup_page = SignupPage(driver)
-    signup_page.enter_email(email)
-    signup_page.click_create_button()
+    with allure.step('Click on create button'):
+        signup_page.click_create_button()
 
     error_msg = signup_page.get_error_msg()
 

@@ -9,5 +9,9 @@
 4. Activate the virtual environment:
 - for windows `venv\Scripts\activate`
 - for macOS/linux `source venv/bin/activate`
-5. Installing dependencies `pip install -r requirements.txt`
-6. Running autotests `pytest`
+5. [Install Allure](https://allurereport.org/docs/gettingstarted-installation/)
+6. Installing dependencies `pip install -r requirements.txt`
+7. Running autotests:
+- for windows `python -m pytest --alluredir allure-results`
+- for macOS/linux `python3 -m pytest --alluredir allure-results`
+8. Generate a report `allure serve allure-results`

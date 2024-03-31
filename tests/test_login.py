@@ -1,21 +1,24 @@
+import allure
 import pytest
 
 from pages.cabinet_profile_page import ProfilePage
 from pages.login_page import LoginPage
-from pages.main_page import MainPage
 
 
+@allure.suite('Login page')
+@allure.title('Login with no verifying account')
 def test_login_with_no_verifying_account(driver, registered_account_without_verification):
     email = registered_account_without_verification['email']
     password = registered_account_without_verification['password']
-    main_page = MainPage(driver)
-    main_page.open()
-    main_page.click_log_in_button()
 
-    log_in_page = LoginPage(driver)
-    log_in_page.enter_email(email)
-    log_in_page.enter_password(password)
-    log_in_page.click_login_button()
+    with allure.step(f'Login with no verifying account, email: {email}, password: {password}'):
+        log_in_page = LoginPage(driver)
+        log_in_page.open()
+        log_in_page.enter_email(email)
+        log_in_page.enter_password(password)
+
+    with allure.step('Click on log in button'):
+        log_in_page.click_login_button()
 
     profile = ProfilePage(driver)
 
@@ -27,17 +30,20 @@ def test_login_with_no_verifying_account(driver, registered_account_without_veri
     assert profile.get_history_table_text() == 'Payment history is empty', 'Wrong history'
 
 
+@allure.suite('Login page')
+@allure.title('Login with verifying account')
 def test_login_with_verifying_account(driver, registered_account_with_verification):
     email = registered_account_with_verification['email']
     password = registered_account_with_verification['password']
-    main_page = MainPage(driver)
-    main_page.open()
-    main_page.click_log_in_button()
 
-    log_in_page = LoginPage(driver)
-    log_in_page.enter_email(email)
-    log_in_page.enter_password(password)
-    log_in_page.click_login_button()
+    with allure.step(f'Login with verifying account, email: {email}, password: {password}'):
+        log_in_page = LoginPage(driver)
+        log_in_page.open()
+        log_in_page.enter_email(email)
+        log_in_page.enter_password(password)
+
+    with allure.step('Click on log in button'):
+        log_in_page.click_login_button()
 
     profile = ProfilePage(driver)
 
@@ -49,35 +55,39 @@ def test_login_with_verifying_account(driver, registered_account_with_verificati
     assert profile.get_history_table_text() == 'Payment history is empty', 'Wrong history'
 
 
+@allure.suite('Login page')
+@allure.title('Login with incorrect data')
 @pytest.mark.parametrize('email, password', [('', ''),
                                              ('  ', '  '),
                                              ('test@test.com', 'password')])
-def test_login_with_incorrect_data(driver, email, password):
-    main_page = MainPage(driver)
-    main_page.open()
-    main_page.click_log_in_button()
+def test_login_with_incorrect_data(driver, open_login_page, email, password):
+    with allure.step(f'Enter incorrect data, email: {email}, password: {password}'):
+        log_in_page = LoginPage(driver)
+        log_in_page.enter_email(email)
+        log_in_page.enter_password(password)
 
-    log_in_page = LoginPage(driver)
-    log_in_page.enter_email(email)
-    log_in_page.enter_password(password)
-    log_in_page.click_login_button()
+    with allure.step('Click on log in button'):
+        log_in_page.click_login_button()
 
     error_message = log_in_page.get_error_message()
 
     assert error_message == 'Wrong email or password', 'Wrong error message'
 
 
+@allure.suite('Login page')
+@allure.title('Login registered account with incorrect password')
 def test_login_registered_account_with_incorrect_password(driver, registered_account_without_verification):
     email = registered_account_without_verification['email']
     password = 'testpassword'
-    main_page = MainPage(driver)
-    main_page.open()
-    main_page.click_log_in_button()
 
-    log_in_page = LoginPage(driver)
-    log_in_page.enter_email(email)
-    log_in_page.enter_password(password)
-    log_in_page.click_login_button()
+    with allure.step(f'Enter registered account with incorrect password, email: {email}, password: {password}'):
+        log_in_page = LoginPage(driver)
+        log_in_page.open()
+        log_in_page.enter_email(email)
+        log_in_page.enter_password(password)
+
+    with allure.step('Click on log in button'):
+        log_in_page.click_login_button()
 
     error_message = log_in_page.get_error_message()
 
