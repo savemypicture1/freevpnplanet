@@ -1,3 +1,5 @@
+from datetime import datetime
+
 import allure
 import pytest
 from selenium import webdriver
@@ -13,23 +15,27 @@ from utils.temp_mail_plus_api import TempMailAPI
 
 
  # Launch tests without opening browser
-@pytest.fixture
-def driver():
-    chrome_options = Options()
-    chrome_options.add_argument("--headless")
-    chrome_options.add_argument("--no-sendbox")
-    chrome_options.add_argument("--window-size=1920,1080")
-    driver = webdriver.Chrome(options=chrome_options)
-    yield driver
-    driver.quit()
-
-
 # @pytest.fixture
 # def driver():
-#     driver = webdriver.Chrome()
-#     driver.maximize_window()
+#     chrome_options = Options()
+#     chrome_options.add_argument("--headless")
+#     chrome_options.add_argument("--no-sendbox")
+#     chrome_options.add_argument("--window-size=1920,1080")
+#     driver = webdriver.Chrome(options=chrome_options)
 #     yield driver
+#     attach = driver.get_screenshot_as_png()
+#     allure.attach(attach, name=f"Screenshot {datetime.today()}", attachment_type=allure.attachment_type.PNG)
 #     driver.quit()
+
+
+@pytest.fixture
+def driver():
+    driver = webdriver.Chrome()
+    driver.maximize_window()
+    yield driver
+    attach = driver.get_screenshot_as_png()
+    allure.attach(attach, name=f"Screenshot {datetime.today()}", attachment_type=allure.attachment_type.PNG)
+    driver.quit()
 
 
 @pytest.fixture
