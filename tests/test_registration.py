@@ -9,6 +9,7 @@ from utils.temp_mail_plus_api import TempMailAPI
 
 
 @allure.suite('Registration page')
+@allure.feature('Registration')
 @allure.title('Test registration')
 def test_registration(driver, open_registration_page):
     email = generate_random_email()
@@ -32,6 +33,7 @@ def test_registration(driver, open_registration_page):
 
 
 @allure.suite('Registration page')
+@allure.feature('Registration')
 @allure.title('Test verification after registration')
 def test_verification_after_registration(driver, registered_account_without_verification):
     email = registered_account_without_verification['email']
@@ -49,6 +51,7 @@ def test_verification_after_registration(driver, registered_account_without_veri
 
 
 @allure.suite('Registration page')
+@allure.feature('Registration')
 @allure.title('Test registration with already registered account')
 def test_registration_with_already_registered_account(driver, registered_account_without_verification):
     email = registered_account_without_verification['email']
@@ -67,6 +70,7 @@ def test_registration_with_already_registered_account(driver, registered_account
 
 
 @allure.suite('Registration page')
+@allure.feature('Registration')
 @allure.title('Test registration with incorrect email')
 @pytest.mark.parametrize('email',
                          ['thisisnotemail', '  ', ''])

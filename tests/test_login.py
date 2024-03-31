@@ -6,6 +6,7 @@ from pages.login_page import LoginPage
 
 
 @allure.suite('Login page')
+@allure.feature('Login')
 @allure.title('Login with no verifying account')
 def test_login_with_no_verifying_account(driver, registered_account_without_verification):
     email = registered_account_without_verification['email']
@@ -31,6 +32,7 @@ def test_login_with_no_verifying_account(driver, registered_account_without_veri
 
 
 @allure.suite('Login page')
+@allure.feature('Login')
 @allure.title('Login with verifying account')
 def test_login_with_verifying_account(driver, registered_account_with_verification):
     email = registered_account_with_verification['email']
@@ -56,6 +58,7 @@ def test_login_with_verifying_account(driver, registered_account_with_verificati
 
 
 @allure.suite('Login page')
+@allure.feature('Login')
 @allure.title('Login with incorrect data')
 @pytest.mark.parametrize('email, password', [('', ''),
                                              ('  ', '  '),
@@ -75,6 +78,7 @@ def test_login_with_incorrect_data(driver, open_login_page, email, password):
 
 
 @allure.suite('Login page')
+@allure.feature('Login')
 @allure.title('Login registered account with incorrect password')
 def test_login_registered_account_with_incorrect_password(driver, registered_account_without_verification):
     email = registered_account_without_verification['email']

@@ -8,6 +8,7 @@ from utils.temp_mail_plus_api import TempMailAPI
 
 
 @allure.suite('Profile page')
+@allure.feature('Profile')
 @allure.title('Test change password')
 def test_change_password(driver, registered_account):
     email = registered_account['email']
@@ -49,6 +50,7 @@ def test_change_password(driver, registered_account):
 
 
 @allure.suite('Profile page')
+@allure.feature('Profile')
 @allure.title('Test change password with incorrect old password')
 def test_change_password_with_incorrect_old_password(driver, registered_account):
     with allure.step('Click on profile button'):
@@ -69,6 +71,7 @@ def test_change_password_with_incorrect_old_password(driver, registered_account)
 
 
 @allure.suite('Profile page')
+@allure.feature('Profile')
 @allure.title('Test change password with different new passwords')
 def test_change_password_with_different_new_passwords(driver, registered_account):
     password = registered_account['password']
@@ -91,6 +94,7 @@ def test_change_password_with_different_new_passwords(driver, registered_account
 
 
 @allure.suite('Profile page')
+@allure.feature('Profile')
 @allure.title('Test verify account')
 def test_verify_account(driver, registered_account):
     email = registered_account['email']
