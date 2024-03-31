@@ -13,22 +13,23 @@ from utils.temp_mail_plus_api import TempMailAPI
 
 
  # Launch tests without opening browser
+@pytest.fixture
+def driver():
+    chrome_options = Options()
+    chrome_options.add_argument("--headless")
+    chrome_options.add_argument("--no-sendbox")
+    chrome_options.add_argument("--window-size=1920,1080")
+    driver = webdriver.Chrome(options=chrome_options)
+    yield driver
+    driver.quit()
+
+
 # @pytest.fixture
 # def driver():
-#     chrome_options = Options()
-#     chrome_options.add_argument("--headless")
-#     driver = webdriver.Chrome(options=chrome_options)
+#     driver = webdriver.Chrome()
 #     driver.maximize_window()
 #     yield driver
 #     driver.quit()
-
-
-@pytest.fixture
-def driver():
-    driver = webdriver.Chrome()
-    driver.maximize_window()
-    yield driver
-    driver.quit()
 
 
 @pytest.fixture
