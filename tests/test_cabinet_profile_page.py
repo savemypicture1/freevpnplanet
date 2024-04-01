@@ -107,6 +107,8 @@ def test_verify_account(driver, registered_account):
         profile_page = ProfilePage(driver)
         profile_page.click_verify_account_button()
 
+    assert profile_page.get_send_email_pop_up() == 'An email has been sent to you to verify your account.', 'No send email pop up'
+
     with allure.step(f'Getting verification link from email {email}'):
         mail_api = TempMailAPI(email)
         verification_link = mail_api.get_confirm_link_from_email('Account Verification')

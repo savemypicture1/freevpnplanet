@@ -16,6 +16,7 @@ class ProfilePage(CabinetPage):
 
     CHANGE_PASSWORD_BUTTON = ('css selector', '.buttons-wrap .change-password')
     VERIFY_ACCOUNT_BUTTON = ('css selector', '.sending button')
+    SEND_EMAIL_POP_UP = ('css selector', '.send-info .title')
 
     HISTORY_TABLE = ('css selector', '.history-table')
 
@@ -74,3 +75,6 @@ class ProfilePage(CabinetPage):
 
     def get_wrong_old_password_message(self) -> str:
         return self.get_text(self.ERROR_VALIDATION_MSG)
+
+    def get_send_email_pop_up(self) -> str:
+        return self.get_text(self.SEND_EMAIL_POP_UP)
