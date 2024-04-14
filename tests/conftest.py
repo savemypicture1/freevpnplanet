@@ -1,27 +1,32 @@
 from datetime import datetime
-
 import allure
 import pytest
 from selenium import webdriver
 from selenium.webdriver.chrome.options import Options
-
-from pages.cabinet_page import CabinetPage
-from pages.cabinet_profile_page import ProfilePage
-from pages.login_page import LoginPage
-from pages.sign_up_page import SignupPage
-from pages.main_page import MainPage
 from utils.email_randomizer import generate_random_email
 from utils.temp_mail_plus_api import TempMailAPI
 
 
  # Launch tests without opening browser
+@pytest.fixture
+def driver(request):
+    chrome_options = Options()
+    chrome_options.add_argument("--headless")
+    chrome_options.add_argument("--no-sendbox")
+    chrome_options.add_argument("--window-size=1920,1080")
+    driver = webdriver.Chrome(options=chrome_options)
+    request.cls.driver = driver
+    yield driver
+    attach = driver.get_screenshot_as_png()
+    allure.attach(attach, name=f"Screenshot {datetime.today()}", attachment_type=allure.attachment_type.PNG)
+    driver.quit()
+
+
 # @pytest.fixture
-# def driver():
-#     chrome_options = Options()
-#     chrome_options.add_argument("--headless")
-#     chrome_options.add_argument("--no-sendbox")
-#     chrome_options.add_argument("--window-size=1920,1080")
-#     driver = webdriver.Chrome(options=chrome_options)
+# def driver(request):
+#     driver = webdriver.Chrome()
+#     driver.maximize_window()
+#     request.cls.driver = driver
 #     yield driver
 #     attach = driver.get_screenshot_as_png()
 #     allure.attach(attach, name=f"Screenshot {datetime.today()}", attachment_type=allure.attachment_type.PNG)
@@ -29,45 +34,32 @@ from utils.temp_mail_plus_api import TempMailAPI
 
 
 @pytest.fixture
-def driver():
-    driver = webdriver.Chrome()
-    driver.maximize_window()
-    yield driver
-    attach = driver.get_screenshot_as_png()
-    allure.attach(attach, name=f"Screenshot {datetime.today()}", attachment_type=allure.attachment_type.PNG)
-    driver.quit()
-
-
-@pytest.fixture
-def open_login_page(driver):
+def open_login_page(request):
     with allure.step('Open the web site https://freevpnplanet.com/'):
-        main_page = MainPage(driver)
-        main_page.open()
+        request.cls.main_page.open()
 
     with allure.step('Click on log in button'):
-        main_page.click_log_in_button()
+        request.cls.main_page.click_log_in_button()
 
 
 @pytest.fixture
-def open_registration_page(driver, open_login_page):
+def open_registration_page(request, open_login_page):
     with allure.step('Click on sign in button'):
-        login_page = LoginPage(driver)
-        login_page.click_sign_up()
+        request.cls.login_page.click_sign_up()
 
 
 @pytest.fixture
-def registered_account(driver, open_registration_page):
+def registered_account(request, open_registration_page):
     email = generate_random_email()
 
     with allure.step(f'Enter email: {email}'):
-        signup_page = SignupPage(driver)
-        signup_page.enter_email(email)
+        request.cls.signup_page.enter_email(email)
 
     with allure.step('Click on create button'):
-        signup_page.click_create_button()
+        request.cls.signup_page.click_create_button()
 
     with allure.step('Click on next button'):
-        signup_page.click_next_button()
+        request.cls.signup_page.click_next_button()
 
     with allure.step(f'Getting password from email: {email}'):
         mail_api = TempMailAPI(email)
@@ -79,14 +71,12 @@ def registered_account(driver, open_registration_page):
 
 
 @pytest.fixture
-def registered_account_without_verification(driver, registered_account):
+def registered_account_without_verification(request, registered_account):
     with allure.step('Click on profile button'):
-        cabinet_page = CabinetPage(driver)
-        cabinet_page.click_profile_button()
+        request.cls.cabinet_page.click_profile_button()
 
     with allure.step('Click on logout button'):
-        profile_page = ProfilePage(driver)
-        profile_page.click_logout()
+        request.cls.profile_page.click_logout()
 
     return registered_account
 
