@@ -10,29 +10,18 @@ class TestProfilePage(BaseTest):
         email = registered_account['email']
         password = registered_account['password']
         new_password = password + '1'
-
-        with allure.step('Click on profile button'):
-            self.cabinet_page.click_profile_button()
-
-        with allure.step('Click on change password button'):
-            self.profile_page.click_change_password_button()
-
-        with allure.step(f'Enter old password: {password}, new passwords: {new_password}, {new_password}'):
-            self.profile_page.enter_change_passwords(password, new_password, new_password)
-
-        with allure.step('Click on change password button to save'):
-            self.profile_page.click_confirm_change_password_button()
+        self.cabinet_page.click_profile_button()
+        self.profile_page.click_change_password_button()
+        self.profile_page.enter_change_passwords(password, new_password, new_password)
+        self.profile_page.click_confirm_change_password_button()
 
         assert self.profile_page.get_password_was_changed_message() == 'Password was changed', 'No password was changed message'
 
-        with allure.step('Click logout'):
-            self.profile_page.click_logout()
-
-        with allure.step(f'Log in with email: {email} and password: {new_password}'):
-            self.main_page.click_log_in_button()
-            self.login_page.enter_email(email)
-            self.login_page.enter_password(new_password)
-            self.login_page.click_login_button()
+        self.profile_page.click_logout()
+        self.main_page.click_log_in_button()
+        self.login_page.enter_email(email)
+        self.login_page.enter_password(new_password)
+        self.login_page.click_login_button()
 
         assert self.profile_page.get_email() == email, 'Wrong email'
         assert self.profile_page.get_account_status() == 'Inactive', 'Wrong status'
@@ -42,48 +31,28 @@ class TestProfilePage(BaseTest):
 
     @allure.title('Test change password with incorrect old password')
     def test_change_password_with_incorrect_old_password(self, registered_account):
-        with allure.step('Click on profile button'):
-            self.cabinet_page.click_profile_button()
-
-        with allure.step('Click on change password button'):
-            self.profile_page.click_change_password_button()
-
-        with allure.step('Enter incorrect old password: "password" and correct new passwords: "newpassword1"'):
-            self.profile_page.enter_change_passwords('password', 'newpassword1', 'newpassword1')
-
-        with allure.step('Click on change password button to save'):
-            self.profile_page.click_confirm_change_password_button()
+        self.cabinet_page.click_profile_button()
+        self.profile_page.click_change_password_button()
+        self.profile_page.enter_change_passwords('password', 'newpassword1', 'newpassword1')
+        self.profile_page.click_confirm_change_password_button()
 
         assert self.profile_page.get_wrong_old_password_message() == 'Wrong old password', 'No error message'
 
     @allure.title('Test change password with different new passwords')
     def test_change_password_with_different_new_passwords(self, registered_account):
         password = registered_account['password']
-
-        with allure.step('Click on profile button'):
-            self.cabinet_page.click_profile_button()
-
-        with allure.step('Click on change password button'):
-            self.profile_page.click_change_password_button()
-
-        with allure.step(
-                f'Enter correct old password: {password} and different new passwords: "newpassword1" and "newpassword123"'):
-            self.profile_page.enter_change_passwords(password, 'newpassword1', 'newpassword123')
-
-        with allure.step('Click on change password button to save'):
-            self.profile_page.click_confirm_change_password_button()
+        self.cabinet_page.click_profile_button()
+        self.profile_page.click_change_password_button()
+        self.profile_page.enter_change_passwords(password, 'newpassword1', 'newpassword123')
+        self.profile_page.click_confirm_change_password_button()
 
         assert self.profile_page.get_wrong_old_password_message() == 'Passwords do not match', 'No error message'
 
     @allure.title('Test verify account')
     def test_verify_account(self, driver, registered_account):
         email = registered_account['email']
-
-        with allure.step('Click on profile button'):
-            self.cabinet_page.click_profile_button()
-
-        with allure.step('Click on verify button'):
-            self.profile_page.click_verify_account_button()
+        self.cabinet_page.click_profile_button()
+        self.profile_page.click_verify_account_button()
 
         assert self.profile_page.get_send_email_pop_up() == 'An email has been sent to you to verify your account.', 'No send email pop up'
 

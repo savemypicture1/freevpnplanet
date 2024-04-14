@@ -15,13 +15,13 @@ class SignupPage(BasePage):
         return self.get_text(self.SIGN_UP_TITLE)
 
     def enter_email(self, email: str) -> None:
-        self.send_keys(self.EMAIL_FIELD, email)
+        self.send_keys(self.EMAIL_FIELD, 'email', email)
 
     def click_create_button(self) -> None:
-        self.click(self.CREATE_BUTTON)
+        self.click(self.CREATE_BUTTON, 'create')
 
     def click_next_button(self) -> None:
-        self.click(self.NEXT_BUTTON)
+        self.click(self.NEXT_BUTTON, 'next')
 
     def get_error_msg(self) -> str:
         return self.get_text(self.ERROR_MSG)

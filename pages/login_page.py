@@ -16,16 +16,16 @@ class LoginPage(BasePage):
         return self.get_text(self.SIGN_IN_TITLE)
 
     def enter_email(self, email: str) -> None:
-        self.send_keys(self.EMAIL_FIELD, email)
+        self.send_keys(self.EMAIL_FIELD, 'email', email)
 
     def enter_password(self, password: str) -> None:
-        self.send_keys(self.PASSWORD_FIELD, password)
+        self.send_keys(self.PASSWORD_FIELD, 'password', password)
 
     def click_login_button(self) -> None:
-        self.click(self.LOGIN_BUTTON)
+        self.click(self.LOGIN_BUTTON, 'login')
 
     def click_sign_up(self) -> None:
-        self.click(self.SIGN_UP_BUTTON)
+        self.click(self.SIGN_UP_BUTTON, 'sign up')
 
     def get_error_message(self) -> str:
         return self.get_text(self.ERROR_MSG)

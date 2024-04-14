@@ -8,4 +8,4 @@ class MainPage(BasePage):
     LOG_IN_BUTTON = ('css selector', '[href="/login/"]')
 
     def click_log_in_button(self) -> None:
-        self.click(self.LOG_IN_BUTTON)
+        self.click(self.LOG_IN_BUTTON, 'login')

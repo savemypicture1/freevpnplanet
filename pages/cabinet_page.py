@@ -10,4 +10,4 @@ class CabinetPage(BasePage):
         return self.get_text(self.TITLE)
 
     def click_profile_button(self) -> None:
-        self.click(self.PROFILE)
+        self.click(self.PROFILE, 'profile')

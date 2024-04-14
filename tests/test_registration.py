@@ -10,16 +10,9 @@ class TestRegistration(BaseTest):
     @allure.title('Test registration')
     def test_registration(self, open_registration_page):
         email = generate_random_email()
-
-        with allure.step(f'Enter valid email: {email}'):
-            self.signup_page.enter_email(email)
-
-        with allure.step('Click on create button'):
-            self.signup_page.click_create_button()
-
-        with allure.step('Click on next button'):
-            self.signup_page.click_next_button()
-
+        self.signup_page.enter_email(email)
+        self.signup_page.click_create_button()
+        self.signup_page.click_next_button()
         title = self.download_page.get_title()
         mail_api = TempMailAPI(email)
 
@@ -42,14 +35,9 @@ class TestRegistration(BaseTest):
     @allure.title('Test registration with already registered account')
     def test_registration_with_already_registered_account(self, registered_account_without_verification):
         email = registered_account_without_verification['email']
-
-        with allure.step(f'Enter registered email: {email}'):
-            self.signup_page.open()
-            self.signup_page.enter_email(email)
-
-        with allure.step('Click on create button'):
-            self.signup_page.click_create_button()
-
+        self.signup_page.open()
+        self.signup_page.enter_email(email)
+        self.signup_page.click_create_button()
         error_msg = self.signup_page.get_error_msg()
 
         assert error_msg == 'The email has already been taken', 'No error message'
@@ -58,12 +46,8 @@ class TestRegistration(BaseTest):
     @pytest.mark.parametrize('email',
                              ['thisisnotemail', '  ', ''])
     def test_registration_with_incorrect_email(self, open_registration_page, email):
-        with allure.step(f'Enter incorrect email: {email}'):
-            self.signup_page.enter_email(email)
-
-        with allure.step('Click on create button'):
-            self.signup_page.click_create_button()
-
+        self.signup_page.enter_email(email)
+        self.signup_page.click_create_button()
         error_msg = self.signup_page.get_error_msg()
 
         assert error_msg == 'Wrong email', 'No error message'

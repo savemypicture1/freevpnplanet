@@ -35,31 +35,21 @@ def driver(request):
 
 @pytest.fixture
 def open_login_page(request):
-    with allure.step('Open the web site https://freevpnplanet.com/'):
-        request.cls.main_page.open()
-
-    with allure.step('Click on log in button'):
-        request.cls.main_page.click_log_in_button()
+    request.cls.main_page.open()
+    request.cls.main_page.click_log_in_button()
 
 
 @pytest.fixture
 def open_registration_page(request, open_login_page):
-    with allure.step('Click on sign in button'):
-        request.cls.login_page.click_sign_up()
+    request.cls.login_page.click_sign_up()
 
 
 @pytest.fixture
 def registered_account(request, open_registration_page):
     email = generate_random_email()
-
-    with allure.step(f'Enter email: {email}'):
-        request.cls.signup_page.enter_email(email)
-
-    with allure.step('Click on create button'):
-        request.cls.signup_page.click_create_button()
-
-    with allure.step('Click on next button'):
-        request.cls.signup_page.click_next_button()
+    request.cls.signup_page.enter_email(email)
+    request.cls.signup_page.click_create_button()
+    request.cls.signup_page.click_next_button()
 
     with allure.step(f'Getting password from email: {email}'):
         mail_api = TempMailAPI(email)
@@ -72,11 +62,8 @@ def registered_account(request, open_registration_page):
 
 @pytest.fixture
 def registered_account_without_verification(request, registered_account):
-    with allure.step('Click on profile button'):
-        request.cls.cabinet_page.click_profile_button()
-
-    with allure.step('Click on logout button'):
-        request.cls.profile_page.click_logout()
+    request.cls.cabinet_page.click_profile_button()
+    request.cls.profile_page.click_logout()
 
     return registered_account
 

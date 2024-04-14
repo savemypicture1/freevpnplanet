@@ -9,14 +9,10 @@ class TestLogin(BaseTest):
     def test_login_with_no_verifying_account(self, registered_account_without_verification):
         email = registered_account_without_verification['email']
         password = registered_account_without_verification['password']
-
-        with allure.step(f'Login with no verifying account, email: {email}, password: {password}'):
-            self.login_page.open()
-            self.login_page.enter_email(email)
-            self.login_page.enter_password(password)
-
-        with allure.step('Click on log in button'):
-            self.login_page.click_login_button()
+        self.login_page.open()
+        self.login_page.enter_email(email)
+        self.login_page.enter_password(password)
+        self.login_page.click_login_button()
 
         assert self.profile_page.get_email() == email, 'Wrong email'
         assert self.profile_page.get_account_status() == 'Inactive', 'Wrong status'
@@ -29,14 +25,10 @@ class TestLogin(BaseTest):
     def test_login_with_verifying_account(self, registered_account_with_verification):
         email = registered_account_with_verification['email']
         password = registered_account_with_verification['password']
-
-        with allure.step(f'Login with verifying account, email: {email}, password: {password}'):
-            self.login_page.open()
-            self.login_page.enter_email(email)
-            self.login_page.enter_password(password)
-
-        with allure.step('Click on log in button'):
-            self.login_page.click_login_button()
+        self.login_page.open()
+        self.login_page.enter_email(email)
+        self.login_page.enter_password(password)
+        self.login_page.click_login_button()
 
         assert self.profile_page.get_email() == email, 'Wrong email'
         assert self.profile_page.get_account_status() == 'Active', 'Wrong status'
@@ -50,13 +42,9 @@ class TestLogin(BaseTest):
                                                  ('  ', '  '),
                                                  ('test@test.com', 'password')])
     def test_login_with_incorrect_data(self, open_login_page, email, password):
-        with allure.step(f'Enter incorrect data, email: {email}, password: {password}'):
-            self.login_page.enter_email(email)
-            self.login_page.enter_password(password)
-
-        with allure.step('Click on log in button'):
-            self.login_page.click_login_button()
-
+        self.login_page.enter_email(email)
+        self.login_page.enter_password(password)
+        self.login_page.click_login_button()
         error_message = self.login_page.get_error_message()
 
         assert error_message == 'Wrong email or password', 'Wrong error message'
@@ -65,15 +53,10 @@ class TestLogin(BaseTest):
     def test_login_registered_account_with_incorrect_password(self, registered_account_without_verification):
         email = registered_account_without_verification['email']
         password = 'testpassword'
-
-        with allure.step(f'Enter registered account with incorrect password, email: {email}, password: {password}'):
-            self.login_page.open()
-            self.login_page.enter_email(email)
-            self.login_page.enter_password(password)
-
-        with allure.step('Click on log in button'):
-            self.login_page.click_login_button()
-
+        self.login_page.open()
+        self.login_page.enter_email(email)
+        self.login_page.enter_password(password)
+        self.login_page.click_login_button()
         error_message = self.login_page.get_error_message()
 
         assert error_message == 'Wrong email or password', 'Wrong error message'
